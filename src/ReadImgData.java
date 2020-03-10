@@ -3,10 +3,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Assignment1 {
+public class ReadImgData {
     public static void main(String[] args) {
         try{
-            FileInputStream myInputFile = new FileInputStream("lena.tif");
+            FileInputStream myInputFile = new FileInputStream("yoda.tif");
             
             int r;
             int col = 0;
