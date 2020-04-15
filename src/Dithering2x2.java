@@ -6,8 +6,8 @@ public class Dithering2x2 {
     static ArrayList<Integer> finalData = new ArrayList<>();
     
     public static void main(String[] args) {
-        String imgName = "shape.raw";
-        int width = 400;
+        String imgName = "chess.raw";
+        int width = 300;
         int count = 0;
         
         try{
@@ -19,14 +19,14 @@ public class Dithering2x2 {
                 var--;
                 if(count > 0 && count <=width/2){
                     if (count > 0 && count <= ((width+1)/2)){
-                    firstRow1(myInputFile.read());
+                        firstRow1(myInputFile.read());
                     }    
                 if(count > 0 && count <=(width)/2){
                         firstRow2(myInputFile.read());
                     }
                 }else{
                     if(count > (width)/2 && count <= width){
-                    secondRow1(myInputFile.read());
+                        secondRow1(myInputFile.read());
                     }
                     if(count > (width)/2 && count <= width){
                         secondRow2(myInputFile.read());
@@ -37,7 +37,6 @@ public class Dithering2x2 {
                 if(count == width){
                         count = 0;
                     }
-                    System.out.println(count);
                 
             }
             myInputFile.close();

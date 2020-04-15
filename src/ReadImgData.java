@@ -1,531 +1,230 @@
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class ReadImgData {
-    public static void main(String[] args) {
-        try{
-            FileInputStream myInputFile = new FileInputStream("yoda.tif");
-            
-            int r;
-            int col = 0;
-            String mForString = "";
-            int m = 0;
-            String imgData="";
-            String byteOrder = "";
-            String version = "";
-            String offset = "";
-            String left = "";
-            String right = "";
-            String left2 = "";
-            String right2 = "";
-            
-            
-            int ifd = 0;
-            String tag = "";
-            String type = "";
-            String count = "";
-            String valueForString ="";
-            int value = 0;
-            
-            String typeLength = "";
-            String newFileType = "";
-            String width = "";
-            String height = "";
-            String bits = "";
-            String compression = "";
-            String photometric = "";
-            String stripOffset = "";
-            String samplePixel = "";
-            String rowsStrip = "";
-            String stripByte = "";
-            String x = "";
-            String y = "";
-            
-            String newFileTypeType = "";
-            String widthType = "";
-            String heightType = "";
-            String bitsType = "";
-            String compressionType = "";
-            String photometricType = "";
-            String stripOffsetType = "";
-            String samplePixelType = "";
-            String rowsStripType = "";
-            String stripByteType = "";
-            String xType = "";
-            String yType = "";
-            
-            String newFileTypeCount = "";
-            String widthCount = "";
-            String heightCount = "";
-            String bitsCount = "";
-            String compressionCount = "";
-            String photometricCount = "";
-            String stripOffsetCount = "";
-            String samplePixelCount = "";
-            String rowsStripCount = "";
-            String stripByteCount = "";
-            String xCount = "";
-            String yCount = "";
-            
-            int newFileTypeValue = 0;
-            int widthValue = 0;
-            int heightValue = 0;
-            int bitsValue = 0;
-            int compressionValue = 0;
-            int photometricValue = 0;
-            int stripOffsetValue = 0;
-            int samplePixelValue = 0;
-            int rowsStripValue = 0;
-            int stripByteValue = 0;
-            int xValue = 0;
-            int yValue = 0;
-          
-            int findData = 0;
-            int findDataRange = 0;
-            
-            while((r = myInputFile.read()) != -1){
-                ArrayList<String> data = new ArrayList<String>();
-                String num = String.format("%02X", (0xFF & r));
-                col++;
-                
-                
-                //find header
-                if(col == 1 || col ==2 ){
-                    byteOrder +=num;
-                    
-                }
-                if(byteOrder.equals("4949")){
-                    
-                    if(col == 3){
-                        version = num;
 
-                    }else if (col == 5 || col == 6){
-                        if(col == 5){
-                           left = num;
-                        }else{
-                            right = num;
-                        }
-                        offset = right + left;
-                    }
-
-                    //find m
-                    if(col == 9 || col == 10){
-                        if(col == 9){
-                           left = num;
-                        }else{
-                            right = num;
-                        }
-
-                        mForString = right + left;
-                        m = Integer.parseInt(mForString,16);
-
-                    }
-
-                    //rang of IFD, data entry
-                        if(col >= 11 && col <= (m*12)+10){
-                            ifd++;
-
-                            //tag
-                            for (int i = 1; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    left = num;
-                                }
-                            }
-
-                            for (int j = 2; j < (m*12)+10; j+=12) {
-                                if(j==ifd){
-                                    right= num;
-                                    tag = right + left;
-                                    if(tag.equals("00FE")){
-                                        newFileType = tag;
-                                    }else if(tag.equals("0100")){
-                                        width = tag;
-                                    }else if(tag.equals("0101")){
-                                        height = tag;
-                                    }else if(tag.equals("0102")){
-                                        bits = tag;
-                                    }else if(tag.equals("0103")){
-                                        compression = tag;
-                                    }else if(tag.equals("0106")){
-                                        photometric  = tag;
-                                    }else if(tag.equals("0111")){
-                                        stripOffset  = tag;
-                                    }else if(tag.equals("0115")){
-                                        samplePixel  = tag;
-                                    }else if(tag.equals("0116")){
-                                        rowsStrip  = tag;
-                                    }else if(tag.equals("0117")){
-                                        stripByte  = tag;
-                                    }else if(tag.equals("011A")){
-                                        x  = tag;
-                                    }else if(tag.equals("011B")){
-                                        y  = tag;
-                                    }
-                                }
-                            }
-
-                            //type
-                            for (int k = 3; k < (m*12)+10; k+=12) {
-                                if(k == ifd){
-                                    type = num;
-
-                                    if(type.equals("03")){
-                                        typeLength = "(SHORT)";
-                                    }else if(type.equals("04")){
-                                        typeLength = "(LONG)";
-                                    }else if(type.equals("05")){
-                                        typeLength = "(RATIONAL)";
-                                    }
-
-                                    if(tag.equals("00FE")){
-                                        newFileTypeType = type+typeLength;
-                                    }else if(tag.equals("0100")){
-                                        widthType = type+typeLength;
-                                    }else if(tag.equals("0101")){
-                                        heightType = type+typeLength;
-                                    }else if(tag.equals("0102")){
-                                        bitsType = type+typeLength;
-                                    }else if(tag.equals("0103")){
-                                        compressionType = type+typeLength;
-                                    }else if(tag.equals("0106")){
-                                        photometricType  = type+typeLength;
-                                    }else if(tag.equals("0111")){
-                                        stripOffsetType  = type+typeLength;
-                                    }else if(tag.equals("0115")){
-                                        samplePixelType  = type+typeLength;
-                                    }else if(tag.equals("0116")){
-                                        rowsStripType  = type+typeLength;
-                                    }else if(tag.equals("0117")){
-                                        stripByteType  = type+typeLength;
-                                    }else if(tag.equals("011A")){
-                                        xType  = type+typeLength;
-                                    }else if(tag.equals("011B")){
-                                        yType  = type+typeLength;
-                                    }
-                                }
-                            }
-
-                            //count
-                            for (int k = 5; k < (m*12)+10; k+=12) {
-                                if(k == ifd){
-                                    count = num;
-
-                                    if(tag.equals("00FE")){
-                                        newFileTypeCount = count;
-                                    }else if(tag.equals("0100")){
-                                        widthCount = count;
-                                    }else if(tag.equals("0101")){
-                                        heightCount = count;
-                                    }else if(tag.equals("0102")){
-                                        bitsCount = count;
-                                    }else if(tag.equals("0103")){
-                                        compressionCount = count;
-                                    }else if(tag.equals("0106")){
-                                        photometricCount  = count;
-                                    }else if(tag.equals("0111")){
-                                        stripOffsetCount  = count;
-                                    }else if(tag.equals("0115")){
-                                        samplePixelCount  = count;
-                                    }else if(tag.equals("0116")){
-                                        rowsStripCount  = count;
-                                    }else if(tag.equals("0117")){
-                                        stripByteCount  = count;
-                                    }else if(tag.equals("011A")){
-                                        xCount  = count;
-                                    }else if(tag.equals("011B")){
-                                        yCount  = count;
-                                    }
-                                }
-                            }
-
-                            //value
-                            for (int i = 9; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    left = num;
-                                }
-                            }
-
-                            for (int k = 10; k < (m*12)+10; k+=12) {
-                                if(k == ifd){
-                                    right = num; 
-                                    valueForString = right + left;
-                                    value = Integer.parseInt(valueForString,16);
-                                    if(tag.equals("00FE")){
-                                        newFileTypeValue = value;
-                                    }else if(tag.equals("0100")){
-                                        widthValue = value;
-                                    }else if(tag.equals("0101")){
-                                        heightValue = value;
-                                    }else if(tag.equals("0102")){
-                                        bitsValue = value;
-                                    }else if(tag.equals("0103")){
-                                        compressionValue = value;
-                                    }else if(tag.equals("0106")){
-                                        photometricValue  = value;
-                                    }else if(tag.equals("0111")){
-                                        stripOffsetValue  = value;
-                                    }else if(tag.equals("0115")){
-                                        samplePixelValue  = value;
-                                    }else if(tag.equals("0116")){
-                                        rowsStripValue  = value;
-                                    }else if(tag.equals("0117")){
-                                        stripByteValue  = value;
-                                    }else if(tag.equals("011A")){
-                                        xValue  = value;
-                                    }else if(tag.equals("011B")){
-                                        yValue  = value;
-                                    }
-                                }
-                                findData = stripOffsetValue/m;
-                                findDataRange = findData*16;
-                            }
-
-                        }
-                        //display tif data
-                        if(col >= findDataRange+1 && findDataRange != 0){
-                            imgData+=num;
-                                if (col % 16 == 0){
-                                    imgData+="\n";
-                                }
-
-                                if (col % 2 == 0){
-                                    imgData+=" ";
-                                }
-                        }
-                        //MSB
-                }else if(byteOrder.equals("4D4D")){
-                    if(col == 4){
-                        version = num;
-
-                    }else if (col == 8){
-                        offset = num;
-                    }
-                    
-                    //find m
-                    if(col == 10){
-                        mForString = num;
-                        m = Integer.parseInt(mForString,16);
-                    }
-
-                    //rang of IFD, data entry
-                        if(col >= 11 && col <= (m*12)+10){
-                            ifd++;
-
-                            //tag
-                            for (int i = 1; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    left = num;
-                                }
-                            }
-
-                            for (int j = 2; j < (m*12)+10; j+=12) {
-                                if(j==ifd){
-                                    right= num;
-                                    tag = left + right;
-                                    if(tag.equals("00FE")){
-                                        newFileType = tag;
-                                    }else if(tag.equals("0100")){
-                                        width = tag;
-                                    }else if(tag.equals("0101")){
-                                        height = tag;
-                                    }else if(tag.equals("0102")){
-                                        bits = tag;
-                                    }else if(tag.equals("0103")){
-                                        compression = tag;
-                                    }else if(tag.equals("0106")){
-                                        photometric  = tag;
-                                    }else if(tag.equals("0111")){
-                                        stripOffset  = tag;
-                                    }else if(tag.equals("0115")){
-                                        samplePixel  = tag;
-                                    }else if(tag.equals("0116")){
-                                        rowsStrip  = tag;
-                                    }else if(tag.equals("0117")){
-                                        stripByte  = tag;
-                                    }else if(tag.equals("011A")){
-                                        x  = tag;
-                                    }else if(tag.equals("011B")){
-                                        y  = tag;
-                                    }
-                                }
-                            }
-
-                            //type
-                            for (int k = 4; k < (m*12)+10; k+=12) {
-                                if(k == ifd){
-                                    type = num;
-
-                                    if(type.equals("03")){
-                                        typeLength = "(SHORT)";
-                                    }else if(type.equals("04")){
-                                        typeLength = "(LONG)";
-                                    }else if(type.equals("05")){
-                                        typeLength = "(RATIONAL)";
-                                    }
-
-                                    if(tag.equals("00FE")){
-                                        newFileTypeType = type+typeLength;
-                                    }else if(tag.equals("0100")){
-                                        widthType = type+typeLength;
-                                    }else if(tag.equals("0101")){
-                                        heightType = type+typeLength;
-                                    }else if(tag.equals("0102")){
-                                        bitsType = type+typeLength;
-                                    }else if(tag.equals("0103")){
-                                        compressionType = type+typeLength;
-                                    }else if(tag.equals("0106")){
-                                        photometricType  = type+typeLength;
-                                    }else if(tag.equals("0111")){
-                                        stripOffsetType  = type+typeLength;
-                                    }else if(tag.equals("0115")){
-                                        samplePixelType  = type+typeLength;
-                                    }else if(tag.equals("0116")){
-                                        rowsStripType  = type+typeLength;
-                                    }else if(tag.equals("0117")){
-                                        stripByteType  = type+typeLength;
-                                    }else if(tag.equals("011A")){
-                                        xType  = type+typeLength;
-                                    }else if(tag.equals("011B")){
-                                        yType  = type+typeLength;
-                                    }
-                                }
-                            }
-
-                            //count
-                            for (int k = 8; k < (m*12)+10; k+=12) {
-                                if(k == ifd){
-                                    count = num;
-
-                                    if(tag.equals("00FE")){
-                                        newFileTypeCount = count;
-                                    }else if(tag.equals("0100")){
-                                        widthCount = count;
-                                    }else if(tag.equals("0101")){
-                                        heightCount = count;
-                                    }else if(tag.equals("0102")){
-                                        bitsCount = count;
-                                    }else if(tag.equals("0103")){
-                                        compressionCount = count;
-                                    }else if(tag.equals("0106")){
-                                        photometricCount  = count;
-                                    }else if(tag.equals("0111")){
-                                        stripOffsetCount  = count;
-                                    }else if(tag.equals("0115")){
-                                        samplePixelCount  = count;
-                                    }else if(tag.equals("0116")){
-                                        rowsStripCount  = count;
-                                    }else if(tag.equals("0117")){
-                                        stripByteCount  = count;
-                                    }else if(tag.equals("011A")){
-                                        xCount  = count;
-                                    }else if(tag.equals("011B")){
-                                        yCount  = count;
-                                    }
-                                }
-                            }
-
-                            //value
-                            
-                            for (int i = 9; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    left = num;
-                                }
-                            }
-                            
-                            for (int i = 10; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    left2 = num;
-                                }
-                                
-                            }
-                            
-                            for (int i = 11; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    right = num;
-                                }
-                            }
-                            
-                            for (int i = 12; i < (m*12)+10; i+=12) {
-                               if(i==ifd){
-                                    right2 = num;
-                                    valueForString = left+left2+right+right2;
-                                    value = Integer.parseInt(valueForString,16);
-                                    if (tag.equals("00FE")) {
-                                        newFileTypeValue = value;
-                                    } else if (tag.equals("0100")) {
-                                        widthValue = value;
-                                    } else if (tag.equals("0101")) {
-                                        heightValue = value;
-                                    } else if (tag.equals("0102")) {
-                                        bitsValue = value;
-                                    } else if (tag.equals("0103")) {
-                                        compressionValue = value;
-                                    } else if (tag.equals("0106")) {
-                                        photometricValue = value;
-                                    } else if (tag.equals("0111")) {
-                                        stripOffsetValue = value;
-                                    } else if (tag.equals("0115")) {
-                                        samplePixelValue = value;
-                                    } else if (tag.equals("0116")) {
-                                        rowsStripValue = value;
-                                    } else if (tag.equals("0117")) {
-                                        stripByteValue = value;
-                                    } else if (tag.equals("011A")) {
-                                        xValue = value;
-                                    } else if (tag.equals("011B")) {
-                                        yValue = value;
-                                    }
-                                }
-                                findData = stripOffsetValue/m;
-                                findDataRange = findData*16;
-                                
-                            }
-
-                        }
-                        //display tif data
-//                        if(col >= findDataRange+1 && findDataRange != 0){
-//                            imgData+=num;
-//                                if (col % 16 == 0){
-//                                    imgData+="\n";
-//                                }
-//
-//                                if (col % 2 == 0){
-//                                    imgData+=" ";
-//                                }
-//                        }
-                }
-                        
-            }
-            myInputFile.close();
-            System.out.println("");
+    static ArrayList<String> arrangedData = new ArrayList<>();
+    static String fileName = "yoda.tif";
+    public static void main(String[] args) throws FileNotFoundException {
+        String formatHeader = "%-15s %-15s"; // formatter
+        
+        try (FileInputStream myInputFile = new FileInputStream(fileName)) {
+            String byteOrder = String.format("%02x", myInputFile.read()) + String.format("%02x", myInputFile.read());
             System.out.println("-----------------------------Header Info-----------------------------");
-            System.out.println("Byte Order: " + byteOrder);
-            System.out.println("Version: " + version);
-            System.out.println("Offset: " + offset.replaceAll("0", ""));
-            System.out.println("-----------------------------Data  Entry-----------------------------");
-            System.out.println("Tag\t\t\t\t\tType\t\tCount\tValue");
+            System.out.println(String.format(formatHeader, "Byte order", ":" + byteOrder));
+            //Check LSB or MSB and arranged the data
+            checkByteOrder(byteOrder);
+            String offset = "";
+            for (int p = 5; p < 9; p++) {
+                offset += arrangedData.get(p);
+            }
+            String version = String.format("%02x", myInputFile.read()).toUpperCase();
+            System.out.println(String.format(formatHeader, "Version", ":" + version));
+            System.out.println(String.format(formatHeader, "Offset", ":" + offset.replaceAll("0", "")));
+
+            //Data Entry
+            String formatBody = "%-37s %-13s %-10s %-10s"; //formatter
+            System.out.println("-----------------------------Data Entry------------------------------");
+            System.out.println(String.format(formatBody, "Tag", "Type", "Count", "Value"));
             System.out.println("---------------------------------------------------------------------");
-            
-            System.out.println(newFileType.replaceAll("0", "") + " (New sub file type)\t\t\t" + newFileTypeType.replaceAll("0", "") + "\t\t" + newFileTypeCount.replaceAll("0", "") + "\t" + newFileTypeValue);
-            System.out.println(width + " (Image width)\t\t\t" + widthType.replaceAll("0", "") + "\t" + widthCount.replaceAll("0", "") + "\t" + widthValue);
-            System.out.println(height + " (Image height)\t\t\t" + heightType.replaceAll("0", "") + "\t" + heightCount.replaceAll("0", "") + "\t" + heightValue);
-            System.out.println(bits + " (Bits per sample)\t\t\t" + bitsType.replaceAll("0", "") + "\t" + bitsCount.replaceAll("0", "") + "\t" + bitsValue);
-            System.out.println(compression + " (Compression)\t\t\t" + compressionType.replaceAll("0", "") + "\t" + compressionCount.replaceAll("0", "") + "\t" + compressionValue);
-            System.out.println(photometric + " (Photometric interpretation)\t" + photometricType.replaceAll("0", "") + "\t" + photometricCount.replaceAll("0", "") + "\t" + photometricValue);
-            System.out.println(stripOffset + " (Strip offsets)\t\t\t" + stripOffsetType.replaceAll("0", "") + "\t\t" + stripOffsetCount.replaceAll("0", "") + "\t" + stripOffsetValue);
-            System.out.println(samplePixel + " (Samples per pixel)\t\t" + samplePixelType.replaceAll("0", "") + "\t" + samplePixelCount.replaceAll("0", "") + "\t" + samplePixelValue);
-            System.out.println(rowsStrip + " (Rows per strip)\t\t\t" + rowsStripType.replaceAll("0", "") + "   \t" + rowsStripCount.replaceAll("0", "") + "\t" + rowsStripValue);
-            System.out.println(stripByte + " (Strip byte counts)\t\t" + stripByteType.replaceAll("0", "") + "\t\t" + stripByteCount.replaceAll("0", "") + "\t" + stripByteValue);
-            System.out.println(x + " (X resolution)\t\t\t" + xType.replaceAll("0", "") + "\t" + xCount.replaceAll("0", "") + "\t" + xValue);
-            System.out.println(y + " (Y resolution)\t\t\t" + yType.replaceAll("0", "") + "\t" + yCount.replaceAll("0", "") + "\t" + yValue);
-                
-              
+            int DEC = Integer.parseInt(arrangedData.get(9), 16); //range of data
+            int getStripOffSet = 0;
+            for (int i = 10; i < DEC * 12; i += 12) {
+                //tag name
+                String tagInt = arrangedData.get(i) + arrangedData.get(i + 1); //get tag from correspond position
+                tagInt = tagInt.replaceFirst("^0+(?!$)", ""); //remove leading 0 from tag
+                String displayTagInt = tagInt;
+                tagInt = Integer.parseInt(tagInt, 16) + ""; //convert it into decimal from hex
+                String tagName = getTag(Integer.parseInt(tagInt)); //get tag name by it's converted int
+
+                //type name
+                String typeInt = arrangedData.get(i + 2) + arrangedData.get(i + 3);
+                typeInt = typeInt.replaceFirst("^0+(?!$)", "");
+                typeInt = Integer.parseInt(typeInt, 16) + "";
+                String typeName = getType(Integer.parseInt(typeInt));
+
+                //length
+                String lengthInt = arrangedData.get(i + 4) + arrangedData.get(i + 5); //first group/2 byte
+                String lengthInt2 = arrangedData.get(i + 6) + arrangedData.get(i + 7); //second group/2 byte
+                lengthInt = lengthInt.replaceFirst("^0+(?!$)", "");
+                lengthInt2 = lengthInt2.replaceFirst("^0+(?!$)", "");
+                int lengthValue = Integer.parseInt(lengthInt, 16) + Integer.parseInt(lengthInt2, 16);
+
+                //value
+                String valueInt = arrangedData.get(i + 8) + arrangedData.get(i + 9); //first group/2 byte
+                String valueInt2 = arrangedData.get(i + 10) + arrangedData.get(i + 11); //second group/2 byte
+                valueInt = valueInt.replaceFirst("^0+(?!$)", "");
+                valueInt2 = valueInt2.replaceFirst("^0+(?!$)", "");
+                int dataValue = Integer.parseInt(valueInt, 16) + Integer.parseInt(valueInt2, 16);
+                if ("111".equals(displayTagInt)) {
+                    getStripOffSet = dataValue;
+                }
+
+                String finalOutput = String.format(formatBody, displayTagInt + tagName, typeName, lengthValue, dataValue); //data set per row
+                System.out.println(finalOutput);
+            }
             System.out.println("-----------------------------Image  Data-----------------------------");
-            System.out.println(" "+imgData);
-        }catch(IOException ex){
-            System.out.println("File Error!");
+            for (int o = getStripOffSet; o < arrangedData.size(); o += 2) {
+                    Collections.swap(arrangedData, o, o + 1);
+                }
+            int count = 0;
+            for (int b = getStripOffSet; b < arrangedData.size(); b++) {
+                System.out.print(arrangedData.get(b) + " ");
+                count++;
+                if (count > 17) {
+                    System.out.println();
+                    count = 0;
+                }
+            }
+            myInputFile.close();   
+        } catch (IOException ex) {
+            System.out.print("File Error!\n" + ex);
         }
     }
+
+    static void checkByteOrder(String byteOrder) {
+        if ("4949".equals(byteOrder)) {
+            try {
+                FileInputStream myInputFile = new FileInputStream(fileName);
+                int value;
+                while ((value = myInputFile.read()) != -1) {
+                    arrangedData.add(String.format("%02x", value).toUpperCase()); //add all data to arrayList
+                }
+                for (int o = 0; o < arrangedData.size(); o += 2) {
+                    Collections.swap(arrangedData, o, o + 1);
+                }
+            } catch (IOException ex) {
+                System.out.print("File Error!\n" + ex);
+            }
+        }
+        else {
+            try {
+                FileInputStream myInputFile = new FileInputStream(fileName);
+                int value;
+                while ((value = myInputFile.read()) != -1) {
+                    arrangedData.add(String.format("%02x", value).toUpperCase()); //add all data to arrayList
+                }
+            } catch (IOException ex) {
+                System.out.print("File Error!\n" + ex);
+            }
+        }
+    }
+
+    static String getTag(int tagInt) {
+        String tag = "";
+        switch (tagInt) {
+            case 254:
+                tag = " (NewSubfileType)";
+                break;
+            case 255:
+                tag = " (SubFileType)";
+                break;
+            case 256:
+                tag = " (ImageWidth)";
+                break;
+            case 257:
+                tag = " (ImageLength)";
+                break;
+            case 258:
+                tag = " (BitsPerSample)";
+                break;
+            case 259:
+                tag = " (Compression)";
+                break;
+            case 262:
+                tag = " (PhotometricInterpretation)";
+                break;
+            case 269:
+                tag = " (DocumentName)";
+                break;
+            case 273:
+                tag = " (StripOffsets)";
+                break;
+            case 277:
+                tag = " (SamplesPerPixel)";
+                break;
+            case 278:
+                tag = " (RowsPerStrip)";
+                break;
+            case 279:
+                tag = " (StripByteCounts)";
+                break;
+            case 282:
+                tag = " (XResolution)";
+                break;
+            case 283:
+                tag = " (YResolution)";
+                break;
+            case 284:
+                tag = " (PlanarConfiguration)";
+                break;
+            case 296:
+                tag = " (ResolutionUnit)";
+                break;
+            case 37724:
+                tag = " (ImageSourceData)";
+                break;
+            case 34665:
+                tag = " (ExifIFD)";
+                break;
+            case 34377:
+                tag = " (Photoshop)";
+                break;
+            case 700:
+                tag = " (XMP)";
+                break;
+            case 274:
+                tag = " (Orientation)";
+                break;
+            default:
+                break;
+        }
+        return tag;
+    }
+
+    static String getType(int typeInt) {
+        String type = "";
+        switch (typeInt) {
+            case 1:
+                type = " (BYTE)";
+                break;
+            case 2:
+                type = " (ASCII)";
+                break;
+            case 3:
+                type = " (SHORT)";
+                break;
+            case 4:
+                type = " (LONG)";
+                break;
+            case 5:
+                type = " (RATIONAL)";
+                break;
+            case 6:
+                type = " (SBYTE)";
+                break;
+            case 7:
+                type = " (UNDEFINE)";
+                break;
+            case 8:
+                type = " (SSHORT)";
+                break;
+            case 9:
+                type = " (SLONG)";
+                break;
+            case 10:
+                type = " (SRATIONAL)";
+                break;
+            case 11:
+                type = " (FLOAT)";
+                break;
+            case 12:
+                type = " (DOUBLE)";
+                break;
+            default:
+                break;
+        }
+        return type;
+    }
+
 }
