@@ -1,14 +1,20 @@
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Histogram {
     static ArrayList<Integer> list = new ArrayList<>();
-    static String imgName = "lena.raw";
     static int greyLvl[] = new int[256];
     static int greyLvl1[] = new int[256];
     
     public static void main(String[] args) throws FileNotFoundException{
+        Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
         
         double runSum = 0;
         double run1 = 0;
@@ -67,6 +73,8 @@ public class Histogram {
                     myOutputFile.write(0);
                 }else myOutputFile.write(str);
             }
+            
+            System.out.println("Your Output File Name: " + fileNameOutput);
             myOutputFile.close();
         } catch (IOException ex) {
             System.out.print("File output error!");

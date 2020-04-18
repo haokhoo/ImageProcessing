@@ -5,7 +5,20 @@ public class HighPassFilter {
     static ArrayList<Integer> array = new ArrayList<Integer>();
     
     public static void main(String[] args) {
-         HighPassFilter highpass =new HighPassFilter("yoda.raw",123,"high",new ArrayList<>(Arrays.asList(-1,-1,-1,-1,8,-1,-1,-1,-1)));
+        Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        String widthStr;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
+        
+        System.out.print("Enter Image Width: ");
+        widthStr = input.nextLine(); 
+        
+        int width = Integer.parseInt(widthStr);	
+        
+         HighPassFilter highpass =new HighPassFilter(imgName,width,"high",new ArrayList<>(Arrays.asList(-1,-1,-1,-1,8,-1,-1,-1,-1)));
      }
     
     public HighPassFilter(String file,int width,String process,ArrayList<Integer>kernelArray){
@@ -32,6 +45,8 @@ public class HighPassFilter {
                     MyOutputFile.write(findValue(z,width,kernelArray));
                 }
             }
+            
+            System.out.println("Your Output File Name: " + outputfile);
             MyInputFile.close();
             MyOutputFile.close();
         }catch(IOException ex){

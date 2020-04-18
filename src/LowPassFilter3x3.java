@@ -5,7 +5,20 @@ public class LowPassFilter3x3 {
     static ArrayList<Integer> array = new ArrayList<Integer>();
     
      public static void main(String[] args) {
-         LowPassFilter3x3 lowPassFilter3x3=new LowPassFilter3x3("yoda.raw",123,"low 3x3",new ArrayList<>(Arrays.asList(1,1,1,1,1,1,1,1,1)));
+         Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        String widthStr;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
+        
+        System.out.print("Enter Image Width: ");
+        widthStr = input.nextLine(); 
+        
+        int width = Integer.parseInt(widthStr);	
+        
+         LowPassFilter3x3 lowPassFilter3x3=new LowPassFilter3x3(imgName,width,"low 3x3",new ArrayList<>(Arrays.asList(1,1,1,1,1,1,1,1,1)));
      }
      
     public LowPassFilter3x3(String file,int width,String process,ArrayList<Integer>kernelArray){
@@ -32,6 +45,8 @@ public class LowPassFilter3x3 {
                     MyOutputFile.write(findValue(z,width,kernelArray));
                 }
             }
+            
+            System.out.println("Your Output File Name: " + outputfile);
             MyInputFile.close();
             MyOutputFile.close();
         }catch(IOException ex){

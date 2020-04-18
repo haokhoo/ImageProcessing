@@ -4,9 +4,15 @@ import java.util.*;
 public class ReadImgData {
 
     static ArrayList<String> arrangedData = new ArrayList<>();
-    static String fileName = "yoda.tif";
+    static String fileName;
     public static void main(String[] args) throws FileNotFoundException {
         String formatHeader = "%-15s %-15s"; // formatter
+        
+        Scanner input = new Scanner(System.in);
+        
+        
+        System.out.print("Enter Image Name: ");
+        fileName = input.nextLine(); 
         
         try (FileInputStream myInputFile = new FileInputStream(fileName)) {
             String byteOrder = String.format("%02x", myInputFile.read()) + String.format("%02x", myInputFile.read());

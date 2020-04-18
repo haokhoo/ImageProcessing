@@ -6,8 +6,18 @@ public class Dithering2x2 {
     static ArrayList<Integer> finalData = new ArrayList<>();
     
     public static void main(String[] args) {
-        String imgName = "chess.raw";
-        int width = 300;
+        Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        String widthStr;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
+        
+        System.out.print("Enter Image Width: ");
+        widthStr = input.nextLine(); 
+        
+        int width = Integer.parseInt(widthStr);	
         int count = 0;
         
         try{
@@ -47,6 +57,7 @@ public class Dithering2x2 {
                     myOutputFile.write(data);
                  }
                 
+                System.out.println("Your Output File Name: " + outputFileName);
                 myOutputFile.close();
             } catch (IOException ex) {
                 System.out.print("File output error!");

@@ -9,8 +9,18 @@ public class Patterning{
     
     
     public static void main(String[] args) {
-        String imgName = "shape.raw";
-        int width = 400;
+        Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        String widthStr;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
+        
+        System.out.print("Enter Image Width: ");
+        widthStr = input.nextLine(); 
+        
+        int width = Integer.parseInt(widthStr);	
         int value;
         int count = 0;
         
@@ -38,7 +48,7 @@ public class Patterning{
                 for (Integer data : finalData) {
                     myOutputFile.write(data);
                  }
-                
+                System.out.println("Your Output File Name: " + outputFileName);
                 myOutputFile.close();
             } catch (IOException ex) {
                 System.out.print("File output error!");

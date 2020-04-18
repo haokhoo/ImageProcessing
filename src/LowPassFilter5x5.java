@@ -5,7 +5,20 @@ public class LowPassFilter5x5 {
     static ArrayList<Integer> array = new ArrayList<Integer>();
     
     public static void main(String[] args) {
-        LowPassFilter5x5 lowPass5x5=new LowPassFilter5x5("yoda.raw",123,"low 5x5",new ArrayList<>(Arrays.asList(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)));
+        Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        String widthStr;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
+        
+        System.out.print("Enter Image Width: ");
+        widthStr = input.nextLine(); 
+        
+        int width = Integer.parseInt(widthStr);	
+        
+        LowPassFilter5x5 lowPass5x5=new LowPassFilter5x5(imgName,width,"low 5x5",new ArrayList<>(Arrays.asList(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)));
     }
     
     public LowPassFilter5x5(String file,int width,String process,ArrayList<Integer>kernelArray){
@@ -40,6 +53,8 @@ public class LowPassFilter5x5 {
                     MyOutputFile.write(findValue(z,width,kernelArray));
                 }
             }
+            
+            System.out.println("Your Output File Name: " + outputfile);
             MyInputFile.close();
             MyOutputFile.close();
         }catch(IOException ex){

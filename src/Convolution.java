@@ -5,7 +5,20 @@ public class Convolution {
     static ArrayList<Integer> array = new ArrayList<Integer>();
     
      public static void main(String[] args) {
-         Convolution convolution=new Convolution("yoda.raw",123,"convolution",new ArrayList<>(Arrays.asList(-1,0,1,-2,0,2,-1,0,1)));
+        Scanner input = new Scanner(System.in);
+        
+        String imgName;
+        String widthStr;
+        
+        System.out.print("Enter Image Name: ");
+        imgName = input.nextLine(); 
+        
+        System.out.print("Enter Image Width: ");
+        widthStr = input.nextLine(); 
+        
+        int width = Integer.parseInt(widthStr);	
+        
+         Convolution convolution=new Convolution(imgName,width,"convolution",new ArrayList<>(Arrays.asList(-1,0,1,-2,0,2,-1,0,1)));
      }
     public Convolution(String file,int width,String process,ArrayList<Integer>kernelArray){
         try{
@@ -31,6 +44,8 @@ public class Convolution {
                     MyOutputFile.write(findValue(z,width,kernelArray));
                 }
             }
+            
+            System.out.println("Your Output File Name: " + outputfile);
             MyInputFile.close();
             MyOutputFile.close();
         }catch(IOException ex){
